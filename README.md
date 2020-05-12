@@ -28,7 +28,7 @@ Instance consist of:
     ```
     chown -R 1100:1100 journal/
     ```
-4. Specify next environments in `.env` file: _url_; _admin_password_; _secret_; _timezone_; _smtp_ 
+4. Specify next environments in `.env` file: _url_; _admin_password_; _secret_; _timezone_; _smtp_; _elasticsearch_shards_; _elasticsearch_replicas_; 
     * url - specify your server address;
     * admin_password - specify password for default admin account in SHA2; You can generate it with this command: 
         ```
@@ -44,6 +44,24 @@ Instance consist of:
     docker-compose up -d
     ```
 6. Open http://<your ip/dns>:9000 to access your graylog instance.
+
+7. Comment next two string in docker-compose file:
+    ```
+    - GRAYLOG_ELASTICSEARCH_SHARDS=${elasticsearch_shards}
+    - GRAYLOG_ELASTICSEARCH_REPLICAS=${elasticsearch_replicas}
+    ``` 
+8. Pull out node-id file from container and mount it:
+    ```
+    sudo docker cp graylog:/usr/share/graylog/data/config/node-id .
+    ```
+9. Mount it to container. Uncomment this line:
+    ```
+    - ./node-id:/usr/share/graylog/data/config/node-id
+    ```
+10. Relaunch graylog:
+    ```
+    docker-compose up -d
+    ```
 
 ## To-Do
 ---

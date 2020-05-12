@@ -39,6 +39,7 @@ services:
     container_name: graylog
     volumes:
       - ./journal:/usr/share/graylog/data/journal
+      #- ./node-id:/usr/share/graylog/data/config/node-id
     env_file:
       - .env
     environment:
