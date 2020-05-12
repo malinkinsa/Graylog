@@ -50,6 +50,12 @@ services:
       - GRAYLOG_OUTPUTBUFFER_PROCESSORS=${outputbuffer_processors}
       - GRAYLOG_ROOT_TIMEZONE=${timezone}
       - GRAYLOG_SERVER_JAVA_OPTS=-Xms1g -Xmx1g -XX:NewRatio=1 -server -XX:+ResizeTLAB -XX:+UseConcMarkSweepGC -XX:+CMSConcurrentMTEnabled -XX:+CMSClassUnloadingEnabled -XX:+UseParNewGC -XX:-OmitStackTraceInFastThrow
+      - GRAYLOG_TRANSPORT_EMAIL_ENABLED=${email_enabled}
+      - GRAYLOG_TRANSPORT_EMAIL_HOSTNAME=${email_smtp_host}
+      - GRAYLOG_TRANSPORT_EMAIL_PORT=${email_port}
+      - GRAYLOG_TRANSPORT_EMAIL_USE_AUTH=${email_use_auth}
+      - GRAYLOG_TRANSPORT_EMAIL_USE_TLS=${email_use_tls}
+      - GRAYLOG_TRANSPORT_EMAIL_USE_SSL=${email_use_ssl}
       - GRAYLOG_ELASTICSEARCH_SHARDS=${elasticsearch_shards}
       - GRAYLOG_ELASTICSEARCH_REPLICAS=${elasticsearch_replicas}
     networks:
