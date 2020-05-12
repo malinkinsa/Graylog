@@ -28,7 +28,7 @@ Instance consist of:
     ```
     chown -R 1100:1100 journal/
     ```
-4. Specify next environments in `.env` file: _url_; _admin_password_; _secret_; _timezone_; 
+4. Specify next environments in `.env` file: _url_; _admin_password_; _secret_; _timezone_; _smtp_ 
     * url - specify your server address;
     * admin_password - specify password for default admin account in SHA2; You can generate it with this command: 
         ```
@@ -39,7 +39,6 @@ Instance consist of:
         pwgen -N 1 -s 18
         ```
     * timezone - specify a time zone of your graylog instance. [List of valid time zones](https://www.joda.org/joda-time/timezones.html)
-    * Your SMTP settings
 5. Launch all containers:
     ```
     docker-compose up -d
