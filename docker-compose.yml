@@ -1,0 +1,103 @@
+version: '2.2'
+services:
+  elastic:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.8.6
+    container_name: elastic
+    environment:
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms1024m -Xmx1024m"
+      - http.host=0.0.0.0
+      - transport.host=localhost
+      - network.host=0.0.0.0
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    mem_limit: 2g
+    volumes:
+       - ./data:/usr/share/elasticsearch/data
+    networks:
+      - graylog
+  cerebro:
+    image: lmenezes/cerebro:0.8.5
+    container_name: cerebro
+    ports:
+      - 8080:9000
+    networks:
+      - graylog
+  mongo:
+    image: mongo:3
+    container_name: mongo
+    networks:
+      - graylog
+    mem_limit: 1g
+    volumes:
+     - ./mongo_data:/data/db
+     - ./mongo_backup:/dump
+  graylog:
+    image: graylog/graylog:3.2.4
+    container_name: graylog
+    volumes:
+      - ./journal:/usr/share/graylog/data/journal
+    env_file:
+      - .env
+    environment:
+      - GRAYLOG_PASSWORD_SECRET=${secret}
+      - GRAYLOG_ROOT_PASSWORD_SHA2=${admin_password}
+      - GRAYLOG_HTTP_EXTERNAL_URI=${external_uri}
+      - GRAYLOG_MESSAGE_JOURNAL_MAX_SIZE=${journal_size}
+      - GRAYLOG_PROCESSBUFER_PROCESSORS=${processbuffer_processors}
+      - GRAYLOG_OUTPUTBUFFER_PROCESSORS=${outputbuffer_processors}
+      - GRAYLOG_ELASTICSEARCH_HOSTS=${es_host}
+      - GRAYLOG_ROOT_TIMEZONE=${timezone}
+      - GRAYLOG_SERVER_JAVA_OPTS=-Xms2g -Xmx2g -XX:NewRatio=1 -server -XX:+ResizeTLAB -XX:+UseConcMarkSweepGC -XX:+CMSConcurrentMTEnabled -XX:+CMSClassUnloadingEnabled -XX:+UseParNewGC -XX:-OmitStackTraceInFastThrow
+      - GRAYLOG_ELASTICSEARCH_SHARDS=${elasticsearch_shards}
+      - GRAYLOG_ELASTICSEARCH_REPLICAS=${elasticsearch_replicas}
+      - GRAYLOG_IS_MASTER=true
+    networks:
+      - graylog
+    depends_on:
+      - mongo
+      - elastic
+    ports:
+      # Graylog web GUI
+      - 9000:9000
+      # Syslog TCP
+      - 514:514
+      # Syslog UDP
+      - 514:514/udp
+      # GELF TCP
+      - 12201:12201
+      # GELF UDP
+      - 12201:12201/udp
+  graylog_slave:
+    image: graylog/graylog:3.2.4
+    container_name: graylog_slave
+    volumes:
+      - ./journal_slave:/usr/share/graylog/data/journal
+    env_file:
+      - .env
+    environment:
+      - GRAYLOG_IS_MASTER=false
+      - GRAYLOG_PASSWORD_SECRET=${secret}
+      - GRAYLOG_ROOT_PASSWORD_SHA2=${admin_password}
+      - GRAYLOG_HTTP_EXTERNAL_URI=${external_uri}
+      - GRAYLOG_MESSAGE_JOURNAL_MAX_SIZE=${journal_size}
+      - GRAYLOG_PROCESSBUFER_PROCESSORS=${processbuffer_processors}
+      - GRAYLOG_OUTPUTBUFFER_PROCESSORS=${outputbuffer_processors}
+      - GRAYLOG_ELASTICSEARCH_HOSTS=${es_host}
+      - GRAYLOG_ROOT_TIMEZONE=${timezone}
+      - GRAYLOG_SERVER_JAVA_OPTS=-Xms2g -Xmx2g -XX:NewRatio=1 -server -XX:+ResizeTLAB -XX:+UseConcMarkSweepGC -XX:+CMSConcurrentMTEnabled -XX:+CMSClassUnloadingEnabled -XX:+UseParNewGC -XX:-OmitStackTraceInFastThrow
+      - GRAYLOG_ELASTICSEARCH_SHARDS=${elasticsearch_shards}
+      - GRAYLOG_ELASTICSEARCH_REPLICAS=${elasticsearch_replicas}
+    networks:
+      - graylog
+    depends_on:
+      - mongo
+      - graylog
+      - es01
+    ports:
+      - 9001:9000
+networks:
+  graylog:
+    driver: bridge
