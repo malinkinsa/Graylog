@@ -49,6 +49,7 @@ services:
       - GRAYLOG_MESSAGE_JOURNAL_MAX_SIZE=${journal_size}
       - GRAYLOG_PROCESSBUFER_PROCESSORS=${processbuffer_processors}
       - GRAYLOG_OUTPUTBUFFER_PROCESSORS=${outputbuffer_processors}
+      - GRAYLOG_ELASTICSEARCH_HOSTS=${es_host}
       - GRAYLOG_ROOT_TIMEZONE=${timezone}
       - GRAYLOG_SERVER_JAVA_OPTS=-Xms1g -Xmx1g -XX:NewRatio=1 -server -XX:+ResizeTLAB -XX:+UseConcMarkSweepGC -XX:+CMSConcurrentMTEnabled -XX:+CMSClassUnloadingEnabled -XX:+UseParNewGC -XX:-OmitStackTraceInFastThrow
       - GRAYLOG_TRANSPORT_EMAIL_ENABLED=${email_enabled}
