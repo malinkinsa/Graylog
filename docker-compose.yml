@@ -45,7 +45,7 @@ services:
     environment:
       - GRAYLOG_PASSWORD_SECRET=${secret}
       - GRAYLOG_ROOT_PASSWORD_SHA2=${admin_password}
-      - GRAYLOG_HTTP_EXTERNAL_URI=${external_uri}
+      - GRAYLOG_HTTP_EXTERNAL_URI=${uri}
       - GRAYLOG_MESSAGE_JOURNAL_MAX_SIZE=${journal_size}
       - GRAYLOG_PROCESSBUFER_PROCESSORS=${processbuffer_processors}
       - GRAYLOG_OUTPUTBUFFER_PROCESSORS=${outputbuffer_processors}

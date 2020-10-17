@@ -28,8 +28,8 @@ Instance consist of:
     ```
     chown -R 1100:1100 journal/
     ```
-4. Specify next environments in `.env` file: _url_; _admin_password_; _secret_; _timezone_; _smtp_; _elasticsearch_shards_; _elasticsearch_replicas_; 
-    * url - specify your server address;
+4. Specify next environments in `.env` file: _uri_; _admin_password_; _secret_; _timezone_; _smtp_; _elasticsearch_shards_; _elasticsearch_replicas_; 
+    * uri - specify your server address;
     * admin_password - specify password for default admin account in SHA2; You can generate it with this command: 
         ```
         echo -n "Enter Password: " && head -1 </dev/stdin | tr -d '\n' | sha256sum | cut -d" " -f1
