@@ -1,7 +1,7 @@
 version: '2.2'
 services:
   elastic:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.8.6
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.0
     container_name: elastic
     environment:
       - bootstrap.memory_lock=true
@@ -35,7 +35,7 @@ services:
      - ./mongo_data:/data/db
      - ./mongo_backup:/dump
   graylog:
-    image: graylog/graylog:3.2.4
+    image: graylog/graylog:4.0.6
     container_name: graylog
     volumes:
       - ./journal:/usr/share/graylog/data/journal
