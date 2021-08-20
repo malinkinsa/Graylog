@@ -5,7 +5,7 @@ services:
     container_name: elastic
     environment:
       - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms1024m -Xmx1024m"
+      - "ES_JAVA_OPTS=-Xms2048m -Xmx2048m"
       - http.host=0.0.0.0
       - transport.host=localhost
       - network.host=0.0.0.0
@@ -13,7 +13,7 @@ services:
       memlock:
         soft: -1
         hard: -1
-    mem_limit: 2g
+    mem_limit: 4g
     volumes:
        - ./data:/usr/share/elasticsearch/data
     networks:
@@ -59,15 +59,20 @@ services:
       - GRAYLOG_TRANSPORT_EMAIL_USE_SSL=${email_use_ssl}
       - GRAYLOG_ELASTICSEARCH_SHARDS=${elasticsearch_shards}
       - GRAYLOG_ELASTICSEARCH_REPLICAS=${elasticsearch_replicas}
+      - GRAYLOG_ALLOW_LEADING_WILDCARD_SEARCHES=${wildcard_searches}
+      - GRAYLOG_PROMETHEUS_EXPORTER_ENABLED=true
+      - GRAYLOG_PROMETHEUS_EXPORTER_BIND_ADDRESS=0.0.0.0:9833
     networks:
       - graylog
-    mem_limit: 1g
+    mem_limit: 2g
     depends_on:
       - mongo
       - elastic
     ports:
       # Graylog web GUI
       - 9000:9000
+      # Prometheus exporter
+      - 9833:9833
       # Syslog TCP
       - 514:514
       # Syslog UDP
