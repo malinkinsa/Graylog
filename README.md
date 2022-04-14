@@ -24,7 +24,7 @@ Instance consist of:
 2.  Make folders es are readable for **elasticsearch** user:
     ```
     chmod g+rwx data
-    chgrp 1000 data
+    chown 1000:1000 data
     ```
 
 3.  Change permissions for journal directory:

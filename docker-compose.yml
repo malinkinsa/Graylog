@@ -65,9 +65,6 @@ services:
     networks:
       - graylog
     mem_limit: 2g
-    depends_on:
-      - mongo
-      - elastic
     ports:
       # Graylog web GUI
       - 9000:9000
