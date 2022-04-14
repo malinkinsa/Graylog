@@ -19,22 +19,22 @@ services:
     networks:
       - graylog
   cerebro:
-    image: lmenezes/cerebro:0.8.5
+    image: lmenezes/cerebro:0.9.4
     container_name: cerebro
     ports:
       - 8080:9000
     networks:
       - graylog
-  mongo:
+  mongodb:
     image: mongo:4
-    container_name: mongo
+    container_name: mongodb
     networks:
       - graylog
     mem_limit: 1g
     volumes:
      - ./mongo_data:/data/db
   graylog:
-    image: graylog/graylog:4.1.1
+    image: graylog/graylog:4.2.7
     container_name: graylog
     volumes:
       - ./journal:/usr/share/graylog/data/journal
