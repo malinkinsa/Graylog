@@ -69,9 +69,7 @@ Instance consist of:
 
 ## To-Do
 ---
-
-*   Add Nginx as a Reverse-Proxy;
-*   Backup Mongodb;
-*   Authentication in mongodb;
-*   Multinode graylog setup;
-*   ES cluster with x-pack;
+- [x] [Add Nginx as a Reverse-Proxy](docs/nginx.md); 
+- [x] [Backup Mongodb](docs/mongodb.md);
+- [ ] Mongodb in replicaset;
+- [ ] ES cluster with x-pack;
