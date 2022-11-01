@@ -1,75 +1,64 @@
 # Graylog
 
-Fast launch your own graylog instance via docker
----
+Fast launch your own graylog instance via docker  
+- [Graylog](#graylog)
+  - [What is Graylog](#what-is-graylog)
+  - [About this repository](#about-this-repository)
+  - [How to use](#how-to-use)
+  - [To-Do](#to-do)
+
 ## What is Graylog
----
-Graylog is a centralized logging solution that allows the user to collect and search through logs. It provides a powerful query language, a processing pipeline for data transformation, alerting abilities and much more. It is fully extensible through a REST API.
+
+[Graylog](https://www.graylog.org/) is a centralized logging solution that allows the user to collect and search through logs. It provides a powerful query language, a processing pipeline for data transformation, alerting abilities and much more. It is fully extensible through a REST API.
 
 ## About this repository
----
+
 Using this repo you can launch your own instance graylog server in docker.
 Instance consist of:
 *   Graylog container;
 *   Mongodb container;
 *   ES container;
-*   Cerbot container for work with elasticsearch;
+
 ## How to use
----
+
 1.  Clone the repository
     ```
-    git clone git@github.com:malinkinsa/Graylog.git
+    git clone git@github.com:malinkinsa/Graylog.git && cd Graylog/
     ```
 
-2.  Make folders es are readable for **elasticsearch** user:
+2.  Make `seput.sh` executable
     ```
-    chmod g+rwx data
-    chown 1000:1000 data
-    ```
-
-3.  Change permissions for journal directory:
-    ```
-    chown -R 1100:1100 journal/
+    sudo chmod +x setup.sh
     ```
 
-4.  Specify next environments in `.env` file: _uri_; _admin_password_; _secret_; _timezone_; _smtp_; _elasticsearch_shards_; _elasticsearch_replicas_; 
-    *   uri - specify your server address;
-    *   admin_password - specify password for default admin account in SHA2; You can generate it with this command: 
-        ```
-        echo -n "Enter Password: " && head -1 </dev/stdin | tr -d '\n' | sha256sum | cut -d" " -f1
-        ```
-    *   secret - specify a random secret for your graylog instance; You can generate it with this command:
-        ```
-        pwgen -N 1 -s 18
-        ```
-    *   timezone - specify a time zone of your graylog instance. [List of valid time zones](https://www.joda.org/joda-time/timezones.html)
-5.  Launch all containers:
+3. To configure, run setup.sh from the root or with sudo and follow it
+To configure, run setup.sh from the root or with sudo and follow it
     ```
-    docker-compose up -d
+    sudo ./setup.sh
     ```
-6.  Open http://<your ip/dns>:9000 to access your graylog instance.
 
-7.  Comment next two string in docker-compose file:
-    ```
-    - GRAYLOG_ELASTICSEARCH_SHARDS=${elasticsearch_shards}
-    - GRAYLOG_ELASTICSEARCH_REPLICAS=${elasticsearch_replicas}
-    ``` 
-8.  Pull out node-id file from container and mount it:
-    ```
-    sudo docker cp graylog:/usr/share/graylog/data/config/node-id .
-    ```
-9.  Mount it to container. Uncomment this line:
-    ```
-    - ./node-id:/usr/share/graylog/data/config/node-id
-    ```
-10. Relaunch graylog:
-    ```
-    docker-compose up -d
-    ```
+4. Launch containers
+   ```
+   docker-compose up -d
+   ```
+5. Open in browser `http://$server_ip:9000`
+
+6. If you want to save Inputs config after container re creation or update:
+   1. Copy node-id from inside container to current folder
+      ```
+      docker cp graylog:/usr/share/graylog/data/config/node-id .
+      ```
+   2. Uncomment next string in `docker-compose.yml`
+   
+      `#- ./node-id:/usr/share/graylog/data/config/node-id`
+   3. Restart Graylog container
+      ```
+      docker-compose up -d graylog
+      ```
 
 ## To-Do
----
+
 - [x] [Add Nginx as a Reverse-Proxy](docs/nginx.md); 
 - [x] [Backup Mongodb](docs/mongodb.md);
-- [ ] Mongodb in replicaset;
+- [ ] Mongodb in replicaset; <i>Will be when switching to graylog v5</i>
 - [ ] ES cluster with x-pack;
