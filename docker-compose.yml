@@ -1,8 +1,9 @@
 version: '2.2'
 services:
-  elastic:
+
+  elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.10.0
-    container_name: elastic
+    container_name: elasticsearch
     environment:
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms2048m -Xmx2048m"
@@ -18,13 +19,7 @@ services:
        - ./data:/usr/share/elasticsearch/data
     networks:
       - graylog
-  cerebro:
-    image: lmenezes/cerebro:0.9.4
-    container_name: cerebro
-    ports:
-      - 8080:9000
-    networks:
-      - graylog
+
   mongodb:
     image: mongo:4
     container_name: mongodb
@@ -33,8 +28,9 @@ services:
     mem_limit: 1g
     volumes:
      - ./mongo_data:/data/db
+
   graylog:
-    image: graylog/graylog:4.2.7
+    image: graylog/graylog:4.3.8
     container_name: graylog
     volumes:
       - ./journal:/usr/share/graylog/data/journal
@@ -45,21 +41,10 @@ services:
       - GRAYLOG_PASSWORD_SECRET=${secret}
       - GRAYLOG_ROOT_PASSWORD_SHA2=${admin_password}
       - GRAYLOG_HTTP_EXTERNAL_URI=${uri}
-      - GRAYLOG_MESSAGE_JOURNAL_MAX_SIZE=${journal_size}
-      - GRAYLOG_PROCESSBUFER_PROCESSORS=${processbuffer_processors}
-      - GRAYLOG_OUTPUTBUFFER_PROCESSORS=${outputbuffer_processors}
       - GRAYLOG_ELASTICSEARCH_HOSTS=${es_host}
+      - GRAYLOG_MONGODB_URI=${mongo_uri}
       - GRAYLOG_ROOT_TIMEZONE=${timezone}
       - GRAYLOG_SERVER_JAVA_OPTS=-Xms1g -Xmx1g -XX:NewRatio=1 -server -XX:+ResizeTLAB -XX:+UseConcMarkSweepGC -XX:+CMSConcurrentMTEnabled -XX:+CMSClassUnloadingEnabled -XX:+UseParNewGC -XX:-OmitStackTraceInFastThrow
-      - GRAYLOG_TRANSPORT_EMAIL_ENABLED=${email_enabled}
-      - GRAYLOG_TRANSPORT_EMAIL_HOSTNAME=${email_smtp_host}
-      - GRAYLOG_TRANSPORT_EMAIL_PORT=${email_port}
-      - GRAYLOG_TRANSPORT_EMAIL_USE_AUTH=${email_use_auth}
-      - GRAYLOG_TRANSPORT_EMAIL_USE_TLS=${email_use_tls}
-      - GRAYLOG_TRANSPORT_EMAIL_USE_SSL=${email_use_ssl}
-      - GRAYLOG_ELASTICSEARCH_SHARDS=${elasticsearch_shards}
-      - GRAYLOG_ELASTICSEARCH_REPLICAS=${elasticsearch_replicas}
-      - GRAYLOG_ALLOW_LEADING_WILDCARD_SEARCHES=${wildcard_searches}
       - GRAYLOG_PROMETHEUS_EXPORTER_ENABLED=true
       - GRAYLOG_PROMETHEUS_EXPORTER_BIND_ADDRESS=0.0.0.0:9833
     networks:
@@ -78,6 +63,7 @@ services:
       - 12201:12201
       # GELF UDP
       - 12201:12201/udp
+
 networks:
   graylog:
     driver: bridge
