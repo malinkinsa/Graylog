@@ -54,3 +54,13 @@ echo Pulling docker images
 docker pull docker.elastic.co/elasticsearch/elasticsearch:7.10.0
 docker pull graylog/graylog:4.3.8
 docker pull mongo:4
+
+# Preparing systcl config
+if grep -q vm.max_map_count /etc/sysctl.conf; then
+    echo 'Sysctl config ok'
+else
+    echo 'Fixing sysctl config'
+    echo "vm.max_map_count=262144" >> /etc/sysctl.conf
+    echo
+    echo "All that's left is to accomplish: docker-compose  up -d"
+fi
