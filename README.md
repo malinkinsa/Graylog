@@ -15,9 +15,9 @@ Fast launch your own graylog instance via docker
 
 Using this repo you can launch your own instance graylog server in docker.
 Instance consist of:
-*   Graylog container;
-*   Mongodb container;
-*   ES container;
+*   Graylog v5.0 container;
+*   Mongodb v6.0 container;
+*   ElasticSearch v7.10.2 container;
 
 ## How to use
 
