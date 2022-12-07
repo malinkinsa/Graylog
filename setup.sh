@@ -51,13 +51,15 @@ mkdir data && chmod g+rwx data && chown 1000:1000 data
 
 # Preparing docker images
 echo Pulling docker images
-docker pull docker.elastic.co/elasticsearch/elasticsearch:7.10.0
-docker pull graylog/graylog:4.3.8
-docker pull mongo:4
+docker pull docker.elastic.co/elasticsearch/elasticsearch:7.10.2
+docker pull graylog/graylog:5.0
+docker pull mongo:6
 
 # Preparing systcl config
 if grep -q vm.max_map_count /etc/sysctl.conf; then
     echo 'Sysctl config ok'
+    echo
+    echo "All that's left is to accomplish: docker-compose  up -d"
 else
     echo 'Fixing sysctl config'
     echo "vm.max_map_count=262144" >> /etc/sysctl.conf

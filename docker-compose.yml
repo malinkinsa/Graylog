@@ -2,7 +2,7 @@ version: '2.2'
 services:
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.0
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
     container_name: elasticsearch
     environment:
       - bootstrap.memory_lock=true
@@ -21,7 +21,7 @@ services:
       - graylog
 
   mongodb:
-    image: mongo:4
+    image: mongo:6
     container_name: mongodb
     networks:
       - graylog
@@ -30,7 +30,7 @@ services:
      - ./mongo_data:/data/db
 
   graylog:
-    image: graylog/graylog:4.3.8
+    image: graylog/graylog:5.0
     container_name: graylog
     volumes:
       - ./journal:/usr/share/graylog/data/journal
@@ -44,7 +44,7 @@ services:
       - GRAYLOG_ELASTICSEARCH_HOSTS=${es_host}
       - GRAYLOG_MONGODB_URI=${mongo_uri}
       - GRAYLOG_ROOT_TIMEZONE=${timezone}
-      - GRAYLOG_SERVER_JAVA_OPTS=-Xms1g -Xmx1g -XX:NewRatio=1 -server -XX:+ResizeTLAB -XX:+UseConcMarkSweepGC -XX:+CMSConcurrentMTEnabled -XX:+CMSClassUnloadingEnabled -XX:+UseParNewGC -XX:-OmitStackTraceInFastThrow
+      - GRAYLOG_SERVER_JAVA_OPTS=-Xms1g -Xmx1g -XX:NewRatio=1 -server -XX:+ResizeTLAB -XX:-OmitStackTraceInFastThrow
       - GRAYLOG_PROMETHEUS_EXPORTER_ENABLED=true
       - GRAYLOG_PROMETHEUS_EXPORTER_BIND_ADDRESS=0.0.0.0:9833
     networks:
